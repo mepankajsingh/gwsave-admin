@@ -21,11 +21,13 @@ export function BlogPage() {
   }
 
   const handleSave = () => {
+    console.log('handleSave called')
     setView('list')
     setEditingPost(undefined)
   }
 
   const handleCancel = () => {
+    console.log('handleCancel called')
     setView('list')
     setEditingPost(undefined)
   }
