@@ -8,6 +8,8 @@ export function BlogPage() {
   const [view, setView] = useState<'list' | 'create' | 'edit'>('list')
   const [editingPost, setEditingPost] = useState<BlogPost | undefined>()
 
+  console.log('BlogPage rendering, view:', view, 'editingPost:', editingPost)
+
   const handleCreateNew = () => {
     setEditingPost(undefined)
     setView('create')
@@ -30,11 +32,13 @@ export function BlogPage() {
 
   if (view === 'create' || view === 'edit') {
     return (
+      <div className="space-y-6">
       <BlogForm
         post={editingPost}
         onSave={handleSave}
         onCancel={handleCancel}
       />
+      </div>
     )
   }
 
