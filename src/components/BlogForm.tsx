@@ -3,6 +3,7 @@ import { Save, X, Globe, Star, Eye } from 'lucide-react'
 import { BlogService } from '../services/blogService'
 import { BlogPost, CreateBlogPost, LANGUAGES } from '../types/blog'
 import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 interface BlogFormProps {
   post?: BlogPost
@@ -29,6 +30,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
   const [activeLanguage, setActiveLanguage] = useState('en')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isEditMode, setIsEditMode] = useState(false)
 
   const quillModules = {
     toolbar: [
@@ -56,22 +58,27 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
   ]
 
   useEffect(() => {
+    console.log('BlogForm useEffect - post:', post)
     if (post) {
+      setIsEditMode(true)
       setFormData({
-        slug: post.slug,
-        title_en: post.title_en, title_fr: post.title_fr, title_es: post.title_es, title_pt: post.title_pt,
-        title_de: post.title_de, title_ja: post.title_ja, title_hi: post.title_hi, title_ru: post.title_ru,
-        content_en: post.content_en, content_fr: post.content_fr, content_es: post.content_es, content_pt: post.content_pt,
-        content_de: post.content_de, content_ja: post.content_ja, content_hi: post.content_hi, content_ru: post.content_ru,
-        excerpt_en: post.excerpt_en, excerpt_fr: post.excerpt_fr, excerpt_es: post.excerpt_es, excerpt_pt: post.excerpt_pt,
-        excerpt_de: post.excerpt_de, excerpt_ja: post.excerpt_ja, excerpt_hi: post.excerpt_hi, excerpt_ru: post.excerpt_ru,
-        author: post.author,
-        featured_image: post.featured_image,
-        category: post.category,
-        tags: post.tags,
-        published: post.published,
-        featured: post.featured
+        slug: post.slug || '',
+        title_en: post.title_en || '', title_fr: post.title_fr || '', title_es: post.title_es || '', title_pt: post.title_pt || '',
+        title_de: post.title_de || '', title_ja: post.title_ja || '', title_hi: post.title_hi || '', title_ru: post.title_ru || '',
+        content_en: post.content_en || '', content_fr: post.content_fr || '', content_es: post.content_es || '', content_pt: post.content_pt || '',
+        content_de: post.content_de || '', content_ja: post.content_ja || '', content_hi: post.content_hi || '', content_ru: post.content_ru || '',
+        excerpt_en: post.excerpt_en || '', excerpt_fr: post.excerpt_fr || '', excerpt_es: post.excerpt_es || '', excerpt_pt: post.excerpt_pt || '',
+        excerpt_de: post.excerpt_de || '', excerpt_ja: post.excerpt_ja || '', excerpt_hi: post.excerpt_hi || '', excerpt_ru: post.excerpt_ru || '',
+        author: post.author || '',
+        featured_image: post.featured_image || '',
+        category: post.category || '',
+        tags: post.tags || '',
+        published: post.published || false,
+        featured: post.featured || false
       })
+      console.log('Form data set for editing:', formData)
+    } else {
+      setIsEditMode(false)
     }
   }, [post])
 
@@ -87,7 +94,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
 
   const handleTitleChange = (language: string, value: string) => {
     const newFormData = { ...formData, [`title_${language}`]: value }
-    if (language === 'en' && !formData.slug) {
+    if (language === 'en' && (!formData.slug || !isEditMode)) {
       newFormData.slug = generateSlug(value)
     }
     setFormData(newFormData)
@@ -272,14 +279,15 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Content ({LANGUAGES.find(l => l.code === activeLanguage)?.name})
                 </label>
-                <div className="border border-gray-300 rounded-md overflow-hidden">
+                <div className="border border-gray-300 rounded-md overflow-hidden min-h-[400px]">
                   <ReactQuill
                     theme="snow"
                     value={formData[`content_${activeLanguage}` as keyof CreateBlogPost] as string}
                     onChange={(value) => setFormData({ ...formData, [`content_${activeLanguage}`]: value })}
                     modules={quillModules}
                     formats={quillFormats}
-                    style={{ minHeight: '300px' }}
+                    style={{ height: '350px' }}
+                    placeholder={`Enter content in ${LANGUAGES.find(l => l.code === activeLanguage)?.name}...`}
                   />
                 </div>
               </div>
