@@ -61,7 +61,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
     console.log('BlogForm useEffect - post:', post)
     if (post) {
       setIsEditMode(true)
-      setFormData({
+      const newFormData = {
         slug: post.slug || '',
         title_en: post.title_en || '', title_fr: post.title_fr || '', title_es: post.title_es || '', title_pt: post.title_pt || '',
         title_de: post.title_de || '', title_ja: post.title_ja || '', title_hi: post.title_hi || '', title_ru: post.title_ru || '',
@@ -75,10 +75,27 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
         tags: post.tags || '',
         published: post.published || false,
         featured: post.featured || false
-      })
-      console.log('Form data set for editing:', formData)
+      }
+      setFormData(newFormData)
+      console.log('Form data set for editing:', newFormData)
     } else {
       setIsEditMode(false)
+      // Reset form data when not editing
+      setFormData({
+        slug: '',
+        title_en: '', title_fr: '', title_es: '', title_pt: '',
+        title_de: '', title_ja: '', title_hi: '', title_ru: '',
+        content_en: '', content_fr: '', content_es: '', content_pt: '',
+        content_de: '', content_ja: '', content_hi: '', content_ru: '',
+        excerpt_en: '', excerpt_fr: '', excerpt_es: '', excerpt_pt: '',
+        excerpt_de: '', excerpt_ja: '', excerpt_hi: '', excerpt_ru: '',
+        author: '',
+        featured_image: '',
+        category: '',
+        tags: '',
+        published: false,
+        featured: false
+      })
     }
   }, [post])
 
