@@ -17,22 +17,61 @@ export class BlogService {
   static async getBlogPosts(publishedOnly = false): Promise<BlogPost[]> {
     await this.ensureAuthenticated()
     
-    let query = supabase
+    try {
+      let query = supabase
       .from('blog_posts')
       .select('*')
       .order('created_at', { ascending: false })
 
-    if (publishedOnly) {
-      query = query.eq('published', true)
+      if (publishedOnly) {
+        query = query.eq('published', true)
+      }
+
+      const { data, error } = await query
+
+      if (error) {
+        console.error('Blog posts fetch error:', error)
+        throw new Error(`Failed to fetch blog posts: ${error.message}`)
+      }
+
+      // Ensure all posts have string values for tags to prevent split errors
+      const posts = (data || []).map(post => ({
+        ...post,
+        tags: post.tags || '',
+        title_en: post.title_en || '',
+        title_fr: post.title_fr || '',
+        title_es: post.title_es || '',
+        title_pt: post.title_pt || '',
+        title_de: post.title_de || '',
+        title_ja: post.title_ja || '',
+        title_hi: post.title_hi || '',
+        title_ru: post.title_ru || '',
+        content_en: post.content_en || '',
+        content_fr: post.content_fr || '',
+        content_es: post.content_es || '',
+        content_pt: post.content_pt || '',
+        content_de: post.content_de || '',
+        content_ja: post.content_ja || '',
+        content_hi: post.content_hi || '',
+        content_ru: post.content_ru || '',
+        excerpt_en: post.excerpt_en || '',
+        excerpt_fr: post.excerpt_fr || '',
+        excerpt_es: post.excerpt_es || '',
+        excerpt_pt: post.excerpt_pt || '',
+        excerpt_de: post.excerpt_de || '',
+        excerpt_ja: post.excerpt_ja || '',
+        excerpt_hi: post.excerpt_hi || '',
+        excerpt_ru: post.excerpt_ru || '',
+        author: post.author || '',
+        featured_image: post.featured_image || '',
+        category: post.category || ''
+      }))
+
+      return posts
+    } catch (error) {
+      console.error('Error in getBlogPosts:', error)
+      return []
     }
-
-    const { data, error } = await query
-
-    if (error) {
-      throw new Error(`Failed to fetch blog posts: ${error.message}`)
-    }
-
-    return data || []
   }
 
   static async getBlogPost(id: string): Promise<BlogPost | null> {
