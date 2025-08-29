@@ -1,9 +1,10 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
-import { Settings, Database, Plus, BarChart3 } from 'lucide-react'
+import { Settings, Database, Plus, BarChart3, FileText } from 'lucide-react'
 import { PromoCodeForm } from './components/PromoCodeForm'
 import { PromoCodeStats } from './components/PromoCodeStats'
 import { PromoCodeList } from './components/PromoCodeList'
+import { BlogPage } from './components/BlogPage'
 import { LoginPage } from './components/LoginPage'
 import { UserMenu } from './components/UserMenu'
 import { useAuth } from './hooks/useAuth'
@@ -16,6 +17,7 @@ function AppContent() {
     { id: 'dashboard', name: 'Dashboard', icon: BarChart3, path: '/' },
     { id: 'add-codes', name: 'Add Codes', icon: Plus, path: '/add' },
     { id: 'view-codes', name: 'View Codes', icon: Database, path: '/view' },
+    { id: 'blog', name: 'Blog', icon: FileText, path: '/blog' },
   ]
 
   if (loading) {
@@ -102,6 +104,7 @@ function AppContent() {
           <Route path="/" element={<PromoCodeStats />} />
           <Route path="/add" element={<PromoCodeForm />} />
           <Route path="/view" element={<PromoCodeList />} />
+          <Route path="/blog" element={<BlogPage />} />
         </Routes>
       </main>
     </div>
