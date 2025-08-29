@@ -254,7 +254,7 @@ export function BlogList({ onEdit }: BlogListProps) {
                       
                       {post.tags && (
                         <div className="mt-2 flex flex-wrap gap-1">
-                          {post.tags.split(',').map((tag, index) => (
+                          {post.tags.split(',').filter(tag => tag.trim()).map((tag, index) => (
                             <span 
                               key={index} 
                               className="px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-xs"

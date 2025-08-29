@@ -158,6 +158,21 @@ export function PromoCodeList() {
               </button>
             </div>
           )}
+          {selectedCodes.size > 0 && (
+            <div className="ml-auto flex items-center gap-3">
+              <span className="text-sm text-gray-600">
+                {selectedCodes.size} selected
+              </span>
+              <button
+                onClick={() => setShowDeleteModal(true)}
+                disabled={deleteLoading}
+                className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
+              >
+                <Trash2 className="w-4 h-4" />
+                Delete Selected
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

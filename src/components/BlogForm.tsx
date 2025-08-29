@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Save, X, Globe, Star, Eye } from 'lucide-react'
 import { BlogService } from '../services/blogService'
 import { BlogPost, CreateBlogPost, LANGUAGES } from '../types/blog'
+import ReactQuill from 'react-quill'
 
 interface BlogFormProps {
   post?: BlogPost
@@ -28,6 +29,31 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
   const [activeLanguage, setActiveLanguage] = useState('en')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const quillModules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'direction': 'rtl' }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+      ['link', 'image', 'video'],
+      ['clean']
+    ],
+  }
+
+  const quillFormats = [
+    'header', 'font', 'size',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent',
+    'link', 'image', 'video',
+    'color', 'background',
+    'align', 'script'
+  ]
 
   useEffect(() => {
     if (post) {
@@ -246,12 +272,16 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Content ({LANGUAGES.find(l => l.code === activeLanguage)?.name})
                 </label>
-                <textarea
-                  value={formData[`content_${activeLanguage}` as keyof CreateBlogPost] as string}
-                  onChange={(e) => setFormData({ ...formData, [`content_${activeLanguage}`]: e.target.value })}
-                  rows={12}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
-                />
+                <div className="border border-gray-300 rounded-md overflow-hidden">
+                  <ReactQuill
+                    theme="snow"
+                    value={formData[`content_${activeLanguage}` as keyof CreateBlogPost] as string}
+                    onChange={(value) => setFormData({ ...formData, [`content_${activeLanguage}`]: value })}
+                    modules={quillModules}
+                    formats={quillFormats}
+                    style={{ minHeight: '300px' }}
+                  />
+                </div>
               </div>
             </div>
           </div>
