@@ -252,7 +252,7 @@ export function BlogList({ onEdit }: BlogListProps) {
                         <span><strong>Created:</strong> {new Date(post.created_at).toLocaleDateString()}</span>
                       </div>
                       
-                      {post.tags && (
+                      {post.tags && typeof post.tags === 'string' && post.tags.trim() && (
                         <div className="mt-2 flex flex-wrap gap-1">
                           {post.tags.split(',').filter(tag => tag.trim()).map((tag, index) => (
                             <span 
