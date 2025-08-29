@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Search, Filter, Eye, Calendar } from 'lucide-react'
+import { Search, Filter, Eye, Calendar, Trash2, CheckSquare, Square } from 'lucide-react'
 import { PromoCodeService } from '../services/promoCodeService'
 import { PromoCode } from '../lib/supabase'
+import { DeleteConfirmModal } from './DeleteConfirmModal'
 
 export function PromoCodeList() {
   const [promoCodes, setPromoCodes] = useState<PromoCode[]>([])
@@ -10,6 +11,9 @@ export function PromoCodeList() {
   const [typeFilter, setTypeFilter] = useState<'all' | 'starter' | 'standard'>('all')
   const [regionFilter, setRegionFilter] = useState<'all' | 'americas' | 'asia-pacific' | 'emea'>('all')
   const [statusFilter, setStatusFilter] = useState<'all' | 'available' | 'used'>('all')
+  const [selectedCodes, setSelectedCodes] = useState<Set<string>>(new Set())
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false)
 
   // Display mappings for proper case
   const getDisplayType = (type: string) => {
@@ -64,6 +68,54 @@ export function PromoCodeList() {
     }
   }
 
+  const handleSelectCode = (codeId: string) => {
+    const newSelected = new Set(selectedCodes)
+    if (newSelected.has(codeId)) {
+      newSelected.delete(codeId)
+    } else {
+      newSelected.add(codeId)
+    }
+    setSelectedCodes(newSelected)
+  }
+
+  const handleSelectAll = () => {
+    if (selectedCodes.size === filteredCodes.length && filteredCodes.length > 0) {
+      setSelectedCodes(new Set())
+    } else {
+      setSelectedCodes(new Set(filteredCodes.map(code => code.id)))
+    }
+  }
+
+  const handleDeleteSelected = async () => {
+    if (selectedCodes.size === 0) return
+
+    setDeleteLoading(true)
+    try {
+      await PromoCodeService.deletePromoCodes(Array.from(selectedCodes))
+      setSelectedCodes(new Set())
+      setShowDeleteModal(false)
+      window.dispatchEvent(new CustomEvent('promoCodesUpdated'))
+      await loadPromoCodes() // Refresh the list
+    } catch (error) {
+      console.error('Error deleting promo codes:', error)
+    } finally {
+      setDeleteLoading(false)
+    }
+  }
+
+  const handleDeleteSingle = async (codeId: string) => {
+    setDeleteLoading(true)
+    try {
+      await PromoCodeService.deletePromoCodes([codeId])
+      window.dispatchEvent(new CustomEvent('promoCodesUpdated'))
+      await loadPromoCodes() // Refresh the list
+    } catch (error) {
+      console.error('Error deleting promo code:', error)
+    } finally {
+      setDeleteLoading(false)
+    }
+  }
+
   const filteredCodes = promoCodes.filter(code =>
     code.code.toLowerCase().includes(searchTerm.toLowerCase())
   )
@@ -91,6 +143,21 @@ export function PromoCodeList() {
         <div className="flex items-center gap-2 mb-6">
           <Eye className="w-5 h-5 text-blue-600" />
           <h2 className="text-xl font-semibold text-gray-900">Promo Codes</h2>
+          {selectedCodes.size > 0 && (
+            <div className="ml-auto flex items-center gap-3">
+              <span className="text-sm text-gray-600">
+                {selectedCodes.size} selected
+              </span>
+              <button
+                onClick={() => setShowDeleteModal(true)}
+                disabled={deleteLoading}
+                className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
+              >
+                <Trash2 className="w-4 h-4" />
+                Delete Selected
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -167,10 +234,40 @@ export function PromoCodeList() {
           </div>
         ) : filteredCodes.length > 0 ? (
           <div className="space-y-2">
+            <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
+              <button
+                onClick={handleSelectAll}
+                className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                {selectedCodes.size === filteredCodes.length && filteredCodes.length > 0 ? (
+                  <CheckSquare className="w-4 h-4" />
+                ) : (
+                  <Square className="w-4 h-4" />
+                )}
+                Select All ({filteredCodes.length})
+              </button>
+            </div>
             {filteredCodes.map((code) => (
-              <div key={code.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+              <div 
+                key={code.id} 
+                className={`border rounded-lg p-4 transition-colors ${
+                  selectedCodes.has(code.id) 
+                    ? 'border-blue-300 bg-blue-50' 
+                    : 'border-gray-200 hover:bg-gray-50'
+                }`}
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => handleSelectCode(code.id)}
+                      className="text-gray-400 hover:text-blue-600 transition-colors"
+                    >
+                      {selectedCodes.has(code.id) ? (
+                        <CheckSquare className="w-4 h-4 text-blue-600" />
+                      ) : (
+                        <Square className="w-4 h-4" />
+                      )}
+                    </button>
                     <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono">
                       {code.code}
                     </code>
@@ -188,9 +285,19 @@ export function PromoCodeList() {
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => handleDeleteSingle(code.id)}
+                      disabled={deleteLoading}
+                      className="text-gray-400 hover:text-red-600 transition-colors disabled:cursor-not-allowed"
+                      title="Delete this promo code"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
                     <Calendar className="w-3 h-3" />
                     {new Date(code.created_at).toLocaleDateString()}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -209,6 +316,14 @@ export function PromoCodeList() {
           </div>
         )}
       </div>
+
+      <DeleteConfirmModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteSelected}
+        count={selectedCodes.size}
+        isLoading={deleteLoading}
+      />
     </div>
   )
 }

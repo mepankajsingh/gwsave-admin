@@ -169,6 +169,22 @@ export class PromoCodeService {
     })
   }
 
+  static async deletePromoCodes(ids: string[]): Promise<void> {
+    return await this.withRetry(async () => {
+      await this.ensureAuthenticated()
+      
+      const { error } = await supabase
+        .from('promo_codes')
+        .delete()
+        .in('id', ids)
+
+      if (error) {
+        console.error('Error deleting promo codes:', error)
+        throw new Error(`Failed to delete promo codes: ${error.message}`)
+      }
+    })
+  }
+
   static async getPromoCodeStats(): Promise<{
     total: number
     used: number
