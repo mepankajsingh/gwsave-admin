@@ -10,7 +10,7 @@ export function PromoCodeList() {
   const [searchTerm, setSearchTerm] = useState('')
   const [typeFilter, setTypeFilter] = useState<'all' | 'starter' | 'standard'>('all')
   const [regionFilter, setRegionFilter] = useState<'all' | 'americas' | 'asia-pacific' | 'emea'>('all')
-  const [statusFilter, setStatusFilter] = useState<'all' | 'available' | 'used'>('all')
+
   const [selectedCodes, setSelectedCodes] = useState<Set<string>>(new Set())
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
@@ -36,7 +36,7 @@ export function PromoCodeList() {
   // Load data when component mounts or filters change
   useEffect(() => {
     loadPromoCodes()
-  }, [typeFilter, regionFilter, statusFilter])
+  }, [typeFilter, regionFilter])
 
   // Listen for promo code updates
   useEffect(() => {
@@ -57,7 +57,7 @@ export function PromoCodeList() {
       const data = await PromoCodeService.getPromoCodes(
         typeFilter !== 'all' ? typeFilter : undefined,
         regionFilter !== 'all' ? regionFilter : undefined,
-        statusFilter === 'all' ? undefined : statusFilter === 'used'
+        false
       )
       setPromoCodes(data)
     } catch (error) {
@@ -175,7 +175,7 @@ export function PromoCodeList() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
             <div className="relative">
@@ -217,18 +217,7 @@ export function PromoCodeList() {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-            >
-              <option value="all">All Status</option>
-              <option value="available">Available</option>
-              <option value="used">Used</option>
-            </select>
-          </div>
+
         </div>
       </div>
 
@@ -266,8 +255,8 @@ export function PromoCodeList() {
               <div
                 key={code.id}
                 className={`border p-4 transition-colors ${selectedCodes.has(code.id)
-                    ? 'border-blue-300 bg-blue-50'
-                    : 'border-gray-200 hover:bg-gray-50'
+                  ? 'border-blue-300 bg-blue-50'
+                  : 'border-gray-200 hover:bg-gray-50'
                   }`}
               >
                 <div className="flex items-center justify-between">
