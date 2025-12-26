@@ -43,9 +43,9 @@ export function PromoCodeList() {
     const handlePromoCodesUpdated = () => {
       loadPromoCodes()
     }
-    
+
     window.addEventListener('promoCodesUpdated', handlePromoCodesUpdated)
-    
+
     return () => {
       window.removeEventListener('promoCodesUpdated', handlePromoCodesUpdated)
     }
@@ -138,7 +138,7 @@ export function PromoCodeList() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white shadow-sm border border-gray-200">
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center gap-2 mb-6">
           <Eye className="w-5 h-5 text-blue-600" />
@@ -151,7 +151,7 @@ export function PromoCodeList() {
               <button
                 onClick={() => setShowDeleteModal(true)}
                 disabled={deleteLoading}
-                className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
+                className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
               >
                 <Trash2 className="w-4 h-4" />
                 Delete Selected
@@ -166,7 +166,7 @@ export function PromoCodeList() {
               <button
                 onClick={() => setShowDeleteModal(true)}
                 disabled={deleteLoading}
-                className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
+                className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
               >
                 <Trash2 className="w-4 h-4" />
                 Delete Selected
@@ -185,7 +185,7 @@ export function PromoCodeList() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search codes..."
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
           </div>
@@ -195,7 +195,7 @@ export function PromoCodeList() {
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value as any)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             >
               <option value="all">All Types</option>
               <option value="starter">Starter</option>
@@ -208,7 +208,7 @@ export function PromoCodeList() {
             <select
               value={regionFilter}
               onChange={(e) => setRegionFilter(e.target.value as any)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             >
               <option value="all">All Regions</option>
               <option value="americas">Americas</option>
@@ -222,7 +222,7 @@ export function PromoCodeList() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             >
               <option value="all">All Status</option>
               <option value="available">Available</option>
@@ -236,12 +236,12 @@ export function PromoCodeList() {
         {loading ? (
           <div className="space-y-3">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="border border-gray-200 rounded-lg p-4 animate-pulse">
+              <div key={i} className="border border-gray-200 p-4 animate-pulse">
                 <div className="flex items-center justify-between">
-                  <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                  <div className="h-4 bg-gray-200 w-1/4"></div>
                   <div className="flex gap-2">
-                    <div className="h-6 bg-gray-200 rounded w-16"></div>
-                    <div className="h-6 bg-gray-200 rounded w-20"></div>
+                    <div className="h-6 bg-gray-200 w-16"></div>
+                    <div className="h-6 bg-gray-200 w-20"></div>
                   </div>
                 </div>
               </div>
@@ -263,13 +263,12 @@ export function PromoCodeList() {
               </button>
             </div>
             {filteredCodes.map((code) => (
-              <div 
-                key={code.id} 
-                className={`border rounded-lg p-4 transition-colors ${
-                  selectedCodes.has(code.id) 
-                    ? 'border-blue-300 bg-blue-50' 
+              <div
+                key={code.id}
+                className={`border p-4 transition-colors ${selectedCodes.has(code.id)
+                    ? 'border-blue-300 bg-blue-50'
                     : 'border-gray-200 hover:bg-gray-50'
-                }`}
+                  }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -283,19 +282,18 @@ export function PromoCodeList() {
                         <Square className="w-4 h-4" />
                       )}
                     </button>
-                    <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono">
+                    <code className="bg-gray-100 px-2 py-1 text-sm font-mono">
                       {code.code}
                     </code>
                     <div className="flex gap-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(code.type)}`}>
+                      <span className={`px-2 py-1 text-xs font-medium ${getTypeColor(code.type)}`}>
                         {getDisplayType(code.type)}
                       </span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getRegionColor(code.region)}`}>
+                      <span className={`px-2 py-1 text-xs font-medium ${getRegionColor(code.region)}`}>
                         {getDisplayRegion(code.region)}
                       </span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        code.is_used ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                      }`}>
+                      <span className={`px-2 py-1 text-xs font-medium ${code.is_used ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                        }`}>
                         {code.is_used ? 'Used' : 'Available'}
                       </span>
                     </div>
@@ -310,8 +308,8 @@ export function PromoCodeList() {
                       <Trash2 className="w-4 h-4" />
                     </button>
                     <div className="flex items-center gap-2 text-xs text-gray-500">
-                    <Calendar className="w-3 h-3" />
-                    {new Date(code.created_at).toLocaleDateString()}
+                      <Calendar className="w-3 h-3" />
+                      {new Date(code.created_at).toLocaleDateString()}
                     </div>
                   </div>
                 </div>

@@ -27,20 +27,24 @@ export class AuthService {
       }
     }
 
-    // Listen for auth changes
+    // Listen for auth changes but only log them for debugging
+    // We don't want to auto-update state as it causes re-renders on tab switch
     supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
+      console.log('Auth state change:', event)
+
+      // Only handle explicit sign out or sign in events if really needed
+      // For now, we rely on the initial check to avoid flickering
+      if (event === 'SIGNED_OUT') {
+        this.user = null
+        this.notifyListeners()
+      } else if (event === 'SIGNED_IN' && session?.user && !this.user) {
+        // Only update if we don't have a user yet
         const isAdmin = await this.verifyUserIsAdmin(session.user.email!)
         if (isAdmin) {
           this.user = this.mapSupabaseUserToGoogleUser(session.user)
-        } else {
-          this.user = null
-          await supabase.auth.signOut()
+          this.notifyListeners()
         }
-      } else {
-        this.user = null
       }
-      this.notifyListeners()
     })
   }
 
@@ -52,12 +56,12 @@ export class AuthService {
         .eq('email', email)
         .eq('is_admin', true)
         .single()
-      
+
       if (error) {
         console.error('Error checking admin status:', error)
         return false
       }
-      
+
       return !!data
     } catch (error) {
       console.error('Error verifying admin status:', error)
@@ -79,11 +83,14 @@ export class AuthService {
 
   async signIn(): Promise<{ success: boolean; error?: string }> {
     try {
+      // Get redirect URL from env or fallback to current origin
+      const redirectUrl = import.meta.env.VITE_GOOGLE_REDIRECT_URL || window.location.origin
+
       // Attempt to sign in with Google OAuth
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin,
+          redirectTo: redirectUrl,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -93,18 +100,18 @@ export class AuthService {
 
       if (error) {
         console.error('OAuth error:', error)
-        return { 
-          success: false, 
-          error: 'Failed to authenticate with Google. Please try again.' 
+        return {
+          success: false,
+          error: 'Failed to authenticate with Google. Please try again.'
         }
       }
 
       return { success: true }
     } catch (error) {
       console.error('Sign in error:', error)
-      return { 
-        success: false, 
-        error: 'An unexpected error occurred. Please try again.' 
+      return {
+        success: false,
+        error: 'An unexpected error occurred. Please try again.'
       }
     }
   }

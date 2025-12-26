@@ -36,9 +36,9 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
     toolbar: [
       [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
       ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'script': 'sub'}, { 'script': 'super' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'script': 'sub' }, { 'script': 'super' }],
+      [{ 'indent': '-1' }, { 'indent': '+1' }],
       [{ 'direction': 'rtl' }],
       [{ 'color': [] }, { 'background': [] }],
       [{ 'font': [] }],
@@ -138,7 +138,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div className="bg-white shadow-sm border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900">
           {post ? 'Edit Blog Post' : 'Create New Blog Post'}
@@ -152,7 +152,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
+        <div className="bg-red-50 border border-red-200 p-4 mb-6">
           <p className="text-red-800 text-sm">{error}</p>
         </div>
       )}
@@ -166,7 +166,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
               value={formData.slug}
               onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
               placeholder="blog-post-url"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
@@ -178,7 +178,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
               value={formData.author}
               onChange={(e) => setFormData({ ...formData, author: e.target.value })}
               placeholder="Author name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
@@ -192,7 +192,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               placeholder="Category"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
@@ -203,7 +203,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
               value={formData.featured_image}
               onChange={(e) => setFormData({ ...formData, featured_image: e.target.value })}
               placeholder="https://example.com/image.jpg"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -215,7 +215,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
             value={formData.tags}
             onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
             placeholder="tag1, tag2, tag3"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
 
@@ -225,7 +225,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
               type="checkbox"
               checked={formData.published}
               onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
             />
             <Eye className="w-4 h-4 text-gray-500" />
             <span className="text-sm font-medium text-gray-700">Published</span>
@@ -236,7 +236,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
               type="checkbox"
               checked={formData.featured}
               onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
             />
             <Star className="w-4 h-4 text-gray-500" />
             <span className="text-sm font-medium text-gray-700">Featured</span>
@@ -248,25 +248,24 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
             <Globe className="w-5 h-5 text-blue-600" />
             <span className="text-lg font-medium text-gray-900">Multi-language Content</span>
           </div>
-          
-          <div className="border border-gray-200 rounded-lg overflow-hidden">
+
+          <div className="border border-gray-200 overflow-hidden">
             <div className="flex overflow-x-auto bg-gray-50 border-b border-gray-200">
               {LANGUAGES.map((lang) => (
                 <button
                   key={lang.code}
                   type="button"
                   onClick={() => setActiveLanguage(lang.code)}
-                  className={`px-4 py-2 text-sm font-medium border-r border-gray-200 last:border-r-0 transition-colors ${
-                    activeLanguage === lang.code
+                  className={`px-4 py-2 text-sm font-medium border-r border-gray-200 last:border-r-0 transition-colors ${activeLanguage === lang.code
                       ? 'bg-blue-600 text-white'
                       : 'text-gray-700 hover:bg-gray-100'
-                  }`}
+                    }`}
                 >
                   {lang.name}
                 </button>
               ))}
             </div>
-            
+
             <div className="p-4 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -276,7 +275,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
                   type="text"
                   value={formData[`title_${activeLanguage}` as keyof CreateBlogPost] as string}
                   onChange={(e) => handleTitleChange(activeLanguage, e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -288,7 +287,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
                   value={formData[`excerpt_${activeLanguage}` as keyof CreateBlogPost] as string}
                   onChange={(e) => setFormData({ ...formData, [`excerpt_${activeLanguage}`]: e.target.value })}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -296,7 +295,7 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Content ({LANGUAGES.find(l => l.code === activeLanguage)?.name})
                 </label>
-                <div className="border border-gray-300 rounded-md overflow-hidden min-h-[400px]">
+                <div className="border border-gray-300 overflow-hidden min-h-[400px]">
                   <ReactQuill
                     theme="snow"
                     value={formData[`content_${activeLanguage}` as keyof CreateBlogPost] as string}
@@ -317,18 +316,18 @@ export function BlogForm({ post, onSave, onCancel }: BlogFormProps) {
             type="button"
             onClick={onCancel}
             disabled={isLoading}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isLoading}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
           >
             {isLoading ? (
               <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-white border-t-transparent animate-spin" />
                 Saving...
               </>
             ) : (

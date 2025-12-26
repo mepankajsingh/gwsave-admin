@@ -25,7 +25,7 @@ export function BlogList({ onEdit }: BlogListProps) {
     const handleBlogPostsUpdated = () => {
       loadBlogPosts()
     }
-    
+
     window.addEventListener('blogPostsUpdated', handleBlogPostsUpdated)
     return () => window.removeEventListener('blogPostsUpdated', handleBlogPostsUpdated)
   }, [])
@@ -93,15 +93,15 @@ export function BlogList({ onEdit }: BlogListProps) {
 
   const filteredPosts = blogPosts.filter(post => {
     const matchesSearch = post.title_en.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.author.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === 'all' || 
-                         (statusFilter === 'published' && post.published) ||
-                         (statusFilter === 'draft' && !post.published)
+      post.author.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === 'all' ||
+      (statusFilter === 'published' && post.published) ||
+      (statusFilter === 'draft' && !post.published)
     return matchesSearch && matchesStatus
   })
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white shadow-sm border border-gray-200">
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center gap-2 mb-6">
           <Globe className="w-5 h-5 text-blue-600" />
@@ -114,7 +114,7 @@ export function BlogList({ onEdit }: BlogListProps) {
               <button
                 onClick={() => setShowDeleteModal(true)}
                 disabled={deleteLoading}
-                className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
+                className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
               >
                 <Trash2 className="w-4 h-4" />
                 Delete Selected
@@ -133,7 +133,7 @@ export function BlogList({ onEdit }: BlogListProps) {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search posts..."
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
           </div>
@@ -143,7 +143,7 @@ export function BlogList({ onEdit }: BlogListProps) {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             >
               <option value="all">All Posts</option>
               <option value="published">Published</option>
@@ -157,12 +157,12 @@ export function BlogList({ onEdit }: BlogListProps) {
         {loading ? (
           <div className="space-y-3">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="border border-gray-200 rounded-lg p-4 animate-pulse">
+              <div key={i} className="border border-gray-200 p-4 animate-pulse">
                 <div className="flex items-center justify-between">
-                  <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                  <div className="h-4 bg-gray-200 w-1/3"></div>
                   <div className="flex gap-2">
-                    <div className="h-6 bg-gray-200 rounded w-16"></div>
-                    <div className="h-6 bg-gray-200 rounded w-20"></div>
+                    <div className="h-6 bg-gray-200 w-16"></div>
+                    <div className="h-6 bg-gray-200 w-20"></div>
                   </div>
                 </div>
               </div>
@@ -184,13 +184,12 @@ export function BlogList({ onEdit }: BlogListProps) {
               </button>
             </div>
             {filteredPosts.map((post) => (
-              <div 
-                key={post.id} 
-                className={`border rounded-lg p-4 transition-colors ${
-                  selectedPosts.has(post.id) 
-                    ? 'border-blue-300 bg-blue-50' 
+              <div
+                key={post.id}
+                className={`border p-4 transition-colors ${selectedPosts.has(post.id)
+                    ? 'border-blue-300 bg-blue-50'
                     : 'border-gray-200 hover:bg-gray-50'
-                }`}
+                  }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3 flex-1">
@@ -211,16 +210,15 @@ export function BlogList({ onEdit }: BlogListProps) {
                         </h3>
                         <div className="flex gap-2 ml-4">
                           {post.featured && (
-                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800">
                               <Star className="w-3 h-3 inline mr-1" />
                               Featured
                             </span>
                           )}
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${
-                            post.published 
-                              ? 'bg-green-100 text-green-800' 
+                          <span className={`px-2 py-1 text-xs font-medium flex items-center gap-1 ${post.published
+                              ? 'bg-green-100 text-green-800'
                               : 'bg-gray-100 text-gray-800'
-                          }`}>
+                            }`}>
                             {post.published ? (
                               <>
                                 <Eye className="w-3 h-3" />
@@ -235,15 +233,15 @@ export function BlogList({ onEdit }: BlogListProps) {
                           </span>
                         </div>
                       </div>
-                      
+
                       <div className="text-sm text-gray-600 mb-2">
-                        <span className="font-medium">Slug:</span> <code className="bg-gray-100 px-1 rounded">{post.slug}</code>
+                        <span className="font-medium">Slug:</span> <code className="bg-gray-100 px-1">{post.slug}</code>
                       </div>
-                      
+
                       {post.excerpt_en && (
                         <p className="text-sm text-gray-700 mb-2">{post.excerpt_en}</p>
                       )}
-                      
+
                       <div className="flex items-center gap-4 text-xs text-gray-500">
                         <span><strong>Author:</strong> {post.author}</span>
                         {post.category && (
@@ -251,13 +249,13 @@ export function BlogList({ onEdit }: BlogListProps) {
                         )}
                         <span><strong>Created:</strong> {new Date(post.created_at).toLocaleDateString()}</span>
                       </div>
-                      
+
                       {post.tags && typeof post.tags === 'string' && post.tags.trim() && (
                         <div className="mt-2 flex flex-wrap gap-1">
                           {post.tags.split(',').filter(tag => tag.trim()).map((tag, index) => (
-                            <span 
-                              key={index} 
-                              className="px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-xs"
+                            <span
+                              key={index}
+                              className="px-2 py-1 bg-blue-100 text-blue-700 text-xs"
                             >
                               {tag.trim()}
                             </span>
@@ -266,7 +264,7 @@ export function BlogList({ onEdit }: BlogListProps) {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 ml-4">
                     <button
                       onClick={() => onEdit(post)}
